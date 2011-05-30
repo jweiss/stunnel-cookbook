@@ -53,10 +53,11 @@ backend rails_app_servers
 
 <% if !node[:haproxy][:rails_backends].empty? -%>
 backend rails_app_servers_ssl
-  mode tcp
   balance roundrobin
   option redispatch
-  option ssl-hello-chk
+  option httpclose
+  option forwardfor
+  option httpchk <%= node[:haproxy][:health_check_method] %> <%= node[:haproxy][:health_check_url] %>
   <% node[:haproxy][:rails_backends].each do |backend| -%>
   server <%= backend['name'] %> <%= backend['ip'] %>:80 weight <%= backend['backends'] || 10 %> maxconn <%= backend['backends'] * 1 %> check inter <%= node[:haproxy][:check_interval] %>
   <% end -%>
@@ -76,10 +77,11 @@ backend php_app_servers
 
 <% if !node[:haproxy][:php_backends].empty? -%>  
 backend php_app_servers_ssl
-  mode tcp
   balance roundrobin
   option redispatch
-  option ssl-hello-chk
+  option httpclose
+  option forwardfor
+  option httpchk <%= node[:haproxy][:health_check_method] %> <%= node[:haproxy][:health_check_url] %>
   <% node[:haproxy][:php_backends].each do |backend| -%>
   server <%= backend['name'] %> <%= backend['ip'] %>:80 weight <%= backend['backends'] || 10 %> maxconn <%= backend['backends'] * 2 %> check inter <%= node[:haproxy][:check_interval] %>
   <% end -%>  
@@ -99,10 +101,11 @@ backend nodejs_app_servers
 
 <% if !node[:haproxy][:nodejs_backends].empty? -%>
 backend nodejs_app_servers_ssl
-  mode tcp
   balance roundrobin
   option redispatch
-  option ssl-hello-chk
+  option httpclose
+  option forwardfor
+  option httpchk <%= node[:haproxy][:health_check_method] %> <%= node[:haproxy][:health_check_url] %>
   <% node[:haproxy][:nodejs_backends].each do |backend| -%>
   server <%= backend['name'] %> <%= backend['ip'] %>:80 weight <%= backend['backends'] || 10 %> maxconn <%= backend['backends'] * 2 %> check inter <%= node[:haproxy][:check_interval] %>
   <% end -%>
@@ -122,10 +125,11 @@ backend static_servers
 
 <% if !node[:haproxy][:static_backends].empty? -%>  
 backend static_servers_ssl
-  mode tcp
   balance roundrobin
   option redispatch
-  option ssl-hello-chk
+  option httpclose
+  option forwardfor
+  option httpchk <%= node[:haproxy][:health_check_method] %> <%= node[:haproxy][:health_check_url] %>
   <% node[:haproxy][:static_backends].each do |backend| -%>
   server <%= backend['name'] %> <%= backend['ip'] %>:80 weight <%= backend['backends'] || 10 %> maxconn <%= backend['backends'] * 3 %> check inter <%= node[:haproxy][:check_interval] %> 
   <% end -%>
