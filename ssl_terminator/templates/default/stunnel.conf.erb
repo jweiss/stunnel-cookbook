@@ -1,0 +1,54 @@
+; certificate/key is needed in server mode and optional in client mode
+cert = /etc/stunnel/stunnel.crt
+key = /etc/stunnel/stunnel.pem
+
+; protocol version (all, SSLv2, SSLv3, TLSv1)
+sslVersion = SSLv3
+
+; security enhancements for UNIX systems - comment them out on Win32
+; for chroot a copy of some devices and files is needed within the jail
+chroot = /usr/var/lib/stunnel
+setuid = nobody
+setgid = nogroup
+; PID is created inside the chroot jail
+pid = /stunnel.pid
+
+; performance tunings
+socket = l:TCP_NODELAY=1
+socket = r:TCP_NODELAY=1
+;compression = zlib
+
+; workaround for Eudora bug
+;options = DONT_INSERT_EMPTY_FRAGMENTS
+
+; authentication stuff needs to be configured to prevent MITM attacks
+; it is not enabled by default!
+;verify = 2
+; don't forget to c_rehash CApath
+; CApath is located inside chroot jail
+;CApath = /certs
+; it's often easier to use CAfile
+;CAfile = /usr/bin/etc/stunnel/certs.pem
+; don't forget to c_rehash CRLpath
+; CRLpath is located inside chroot jail
+;CRLpath = /crls
+; alternatively CRLfile can be used
+;CRLfile = /usr/bin/etc/stunnel/crls.pem
+
+; debugging stuff (may useful for troubleshooting)
+;debug = 7
+debug = 3
+output = /var/log/stunnel.log
+
+; SSL client mode
+;client = yes
+
+; service-level configuration
+
+[https]
+accept  = 443
+connect = 81
+TIMEOUTclose = 0
+xforwardedfor=yes
+
+; vim:ft=dosini
