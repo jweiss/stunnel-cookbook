@@ -57,6 +57,7 @@ backend rails_app_servers_ssl
   option redispatch
   option httpclose
   option forwardfor
+  reqadd X-Forwarded-Proto:\ https
   option httpchk <%= node[:haproxy][:health_check_method] %> <%= node[:haproxy][:health_check_url] %>
   <% node[:haproxy][:rails_backends].each do |backend| -%>
   server <%= backend['name'] %> <%= backend['ip'] %>:80 weight <%= backend['backends'] || 10 %> maxconn <%= backend['backends'] * 1 %> check inter <%= node[:haproxy][:check_interval] %>
@@ -69,6 +70,7 @@ backend php_app_servers
   option redispatch
   option httpclose
   option forwardfor
+  reqadd X-Forwarded-Proto:\ https
   option httpchk <%= node[:haproxy][:health_check_method] %> <%= node[:haproxy][:health_check_url] %>
   <% node[:haproxy][:php_backends].each do |backend| -%>
   server <%= backend['name'] %> <%= backend['ip'] %>:80 weight <%= backend['backends'] || 10 %> maxconn <%= backend['backends'] * 2 %> check inter <%= node[:haproxy][:check_interval] %>
@@ -81,6 +83,7 @@ backend php_app_servers_ssl
   option redispatch
   option httpclose
   option forwardfor
+  reqadd X-Forwarded-Proto:\ https
   option httpchk <%= node[:haproxy][:health_check_method] %> <%= node[:haproxy][:health_check_url] %>
   <% node[:haproxy][:php_backends].each do |backend| -%>
   server <%= backend['name'] %> <%= backend['ip'] %>:80 weight <%= backend['backends'] || 10 %> maxconn <%= backend['backends'] * 2 %> check inter <%= node[:haproxy][:check_interval] %>
@@ -105,6 +108,7 @@ backend nodejs_app_servers_ssl
   option redispatch
   option httpclose
   option forwardfor
+  reqadd X-Forwarded-Proto:\ https
   option httpchk <%= node[:haproxy][:health_check_method] %> <%= node[:haproxy][:health_check_url] %>
   <% node[:haproxy][:nodejs_backends].each do |backend| -%>
   server <%= backend['name'] %> <%= backend['ip'] %>:80 weight <%= backend['backends'] || 10 %> maxconn <%= backend['backends'] * 2 %> check inter <%= node[:haproxy][:check_interval] %>
@@ -129,6 +133,7 @@ backend static_servers_ssl
   option redispatch
   option httpclose
   option forwardfor
+  reqadd X-Forwarded-Proto:\ https
   option httpchk <%= node[:haproxy][:health_check_method] %> <%= node[:haproxy][:health_check_url] %>
   <% node[:haproxy][:static_backends].each do |backend| -%>
   server <%= backend['name'] %> <%= backend['ip'] %>:80 weight <%= backend['backends'] || 10 %> maxconn <%= backend['backends'] * 3 %> check inter <%= node[:haproxy][:check_interval] %> 
