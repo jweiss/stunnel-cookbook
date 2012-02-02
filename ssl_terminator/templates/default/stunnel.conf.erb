@@ -3,7 +3,9 @@ cert = /etc/stunnel/stunnel.crt
 key = /etc/stunnel/stunnel.pem
 
 ; protocol version (all, SSLv2, SSLv3, TLSv1)
-sslVersion = SSLv3
+; sslVersion = SSLv3 - intenet explorer does not work with only SSLv3
+sslVersion = all
+options = NO_SSLv2
 
 ; security enhancements for UNIX systems - comment them out on Win32
 ; for chroot a copy of some devices and files is needed within the jail
